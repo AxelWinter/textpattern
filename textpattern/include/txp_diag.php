@@ -472,7 +472,7 @@ $LastChangedRevision$
 	$fmt_date = '%Y-%m-%d %H:%M:%S';
 
 	$out = array(
-		'<textarea cols="78" rows="18" readonly="readonly" style="width: 500px; height: 300px;">',
+		'<textarea id="diagnostic-details" cols="78" rows="18" readonly="readonly">',
 
 		gTxt('txp_version').cs.txp_version.' ('.($rev ? 'r'.$rev : 'unknown revision').')'.n,
 
