@@ -90,7 +90,7 @@ width: 140px;
 padding: 0;
 }
 
-#nav li ul li:hover, #nav li ul li.sfhover  {
+#nav li ul li:hover, #nav li ul li.sfhover {
 border: none;
 margin: 0 -1px;
 }
