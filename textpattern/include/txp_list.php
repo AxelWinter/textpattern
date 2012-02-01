@@ -213,7 +213,7 @@ $LastChangedRevision$
 			$tfoot = n.'<tfoot>'.tr(
 				tda(
 					toggle_box('articles_detail'),
-					' class="detail-toggle" colspan="2" style="text-align: left; border: none;"'
+					' class="detail-toggle" colspan="2"'
 				).
 
 				tda(

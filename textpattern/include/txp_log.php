@@ -175,7 +175,7 @@ $LastChangedRevision$
 			$tfoot = n.'<tfoot>'.tr(
 				tda(
 					toggle_box('log_detail'),
-					' class="detail-toggle" colspan="2" style="text-align: left; border: none;"'
+					' class="detail-toggle" colspan="2"'
 				).
 				tda(
 					select_buttons().

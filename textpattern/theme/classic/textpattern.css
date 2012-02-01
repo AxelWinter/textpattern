@@ -330,6 +330,10 @@ table#list td.unpublished {
 color: #ccc;
 }
 
+table#list td.detail-toggle {
+border: none;
+}
+
 table#list th {
 vertical-align: bottom;
 }
