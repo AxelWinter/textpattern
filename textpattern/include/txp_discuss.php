@@ -83,7 +83,7 @@ $LastChangedRevision$
 
 		echo graf(
 			'<a href="index.php?event=discuss'.a.'step=ipban_list">'.gTxt('list_banned_ips').'</a>'
-		, ' id="list_banned_ips" style="text-align: center;"');
+		, ' id="list_banned_ips"');
 
 		extract(gpsa(array('sort', 'dir', 'page', 'crit', 'search_method')));
 		if ($sort === '') $sort = get_pref('discuss_sort_column', 'date');

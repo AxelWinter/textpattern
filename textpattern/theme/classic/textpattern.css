@@ -667,6 +667,10 @@ display:none;
 /* comments
 ----------------------------------------------- */
 
+#list_banned_ips {
+text-align: center;
+}
+
 tr.spam td,
 tr.spam a {
 color: #666;
