@@ -531,6 +531,10 @@ clear:both;
 /* setup
 ----------------------------------------------- */
 
+#page-setup {
+border-top: 15px solid #fc3;
+}
+
 table#setup td {
 padding: 3px;
 vertical-align: middle;
