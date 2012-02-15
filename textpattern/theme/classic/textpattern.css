@@ -380,6 +380,11 @@ font-size: 0.9em;
 text-align: center;
 }
 
+.pageby div {
+margin: auto;
+text-align: center;
+}
+
 span.navlink-disabled {
 padding: 3px;
 color: #999;

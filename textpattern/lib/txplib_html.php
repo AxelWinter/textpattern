@@ -857,7 +857,7 @@ $LastChangedRevision$
 		$page = str_replace('{page}', $select_page, gTxt('view_per_page'));
 
 		return form(
-			'<div style="margin: auto; text-align: center;">'.
+			'<div>'.
 				$page.
 				eInput($event).
 				sInput($event.'_change_pageby').
