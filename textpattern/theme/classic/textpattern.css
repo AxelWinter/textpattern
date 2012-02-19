@@ -363,6 +363,11 @@ table#list li {
 margin: 0 0 2px 0;
 }
 
+table#list .multi-edit {
+text-align: right;
+border: none;
+}
+
 /* other element overrides
 ----------------------------------------------- */
 

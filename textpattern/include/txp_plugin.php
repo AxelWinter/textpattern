@@ -94,7 +94,7 @@ $LastChangedRevision$
 				tda(
 					select_buttons().
 					plugin_multiedit_form('', $sort, $dir, '', '')
-				, ' class="multi-edit" colspan="10" style="text-align: right; border: none;"')
+				, ' class="multi-edit" colspan="10"')
 			).n.'</tfoot>';
 
 			echo $tfoot;

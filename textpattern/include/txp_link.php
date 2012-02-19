@@ -172,7 +172,7 @@ $LastChangedRevision$
 					tda(
 						select_buttons().
 						link_multiedit_form($page, $sort, $dir, $crit, $search_method)
-					, ' class="multi-edit" colspan="'.($show_authors ? '8' : '7').'" style="text-align: right; border: none;"')
+					, ' class="multi-edit" colspan="'.($show_authors ? '8' : '7').'"')
 				).n.'</tfoot>';
 
 				echo $tfoot;

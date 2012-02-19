@@ -180,7 +180,7 @@ $LastChangedRevision$
 				tda(
 					select_buttons().
 					log_multiedit_form($page, $sort, $dir, $crit, $search_method)
-				, ' class="multi-edit" colspan="6" style="text-align: right; border: none;"')
+				, ' class="multi-edit" colspan="6"')
 			).n.'</tfoot>';
 
 

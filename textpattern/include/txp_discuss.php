@@ -254,7 +254,7 @@ $LastChangedRevision$
 				tda(
 					select_buttons().
 					discuss_multiedit_form($page, $sort, $dir, $crit, $search_method)
-				, ' class="multi-edit" colspan="9" style="text-align: right; border: none;"')
+				, ' class="multi-edit" colspan="9"')
 			).n.'</tfoot>';
 
 			echo $tfoot;
