@@ -548,6 +548,12 @@ vertical-align: middle;
 /* organize
 ----------------------------------------------- */
 
+td.categories {
+vertical-align: top;
+text-align: left;
+padding: 8px;
+}
+
 td.categories p {
 margin: 6px auto 3px auto;
 padding-top: 3px;
