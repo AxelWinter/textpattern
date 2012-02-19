@@ -365,6 +365,9 @@ margin: 0 0 2px 0;
 
 table#list .multi-edit {
 text-align: right;
+}
+
+table#list tfoot .multi-edit {
 border: none;
 }
 
