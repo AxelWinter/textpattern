@@ -49,7 +49,7 @@ $LastChangedRevision$
 			tr(
 				tda(
 					plugin_form()
-				,' colspan="8" style="height: 30px; border: none;"')
+				,' colspan="8"')
 			).
 		endTable().
 		'</div>';
