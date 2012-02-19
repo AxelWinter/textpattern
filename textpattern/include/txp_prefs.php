@@ -854,9 +854,7 @@ EOS
 			, '3', '', 'nav-tertiary')
 		),
 
-		tr(tda('&nbsp;',' colspan="3" style="font-size:0.25em"')),
 		tr( $lang_form ),
-		tr(tda('&nbsp;',' colspan="3" style="font-size:0.25em"')),
 		tr(tda(gTxt('language')).tda(gTxt('from_server')).( ($show_files) ? tda(gTxt('from_file')) : '' ), ' style="font-weight:bold"');
 		echo $list;
 
