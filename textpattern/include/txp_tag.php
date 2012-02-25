@@ -3523,7 +3523,7 @@ begin tag builder functions
 		$out = form(
 			startTable('tagbuilder').
 
-			tr(tdcs(hed(gTxt('tag_'.$tag_name),3),2) ).
+			tr(tdcs(hed(gTxt('tag_'.$tag_name),2),2) ).
 
 			tagRow('category',
 				file_category_pop($category)).
