@@ -1,8 +1,8 @@
 <?php
 
 /*
-$HeadURL$
-$LastChangedRevision$
+$HeadURL: http://textpattern.googlecode.com/svn/development/4.x/textpattern/include/txp_import.php $
+$LastChangedRevision: 3556 $
 */
 
 	if (!defined('txpinterface')) die('txpinterface is undefined.');

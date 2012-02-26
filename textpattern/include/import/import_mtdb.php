@@ -1,7 +1,7 @@
 <?php
 /*
-$HeadURL$
-$LastChangedRevision$
+$HeadURL: http://textpattern.googlecode.com/svn/development/4.x/textpattern/include/import/import_mtdb.php $
+$LastChangedRevision: 3488 $
 */
 
 

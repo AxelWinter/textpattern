@@ -1,8 +1,8 @@
 <?php
 
 /*
-$HeadURL$
-$LastChangedRevision$
+$HeadURL: http://textpattern.googlecode.com/svn/development/4.x/textpattern/lib/txplib_db.php $
+$LastChangedRevision: 3389 $
 */
 
 if (!defined('PFX')) {

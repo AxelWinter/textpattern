@@ -13,8 +13,8 @@
 
 	Use of this software denotes acceptance of the Textpattern license agreement
 
-$HeadURL$
-$LastChangedRevision$
+$HeadURL: http://textpattern.googlecode.com/svn/development/4.x/textpattern/publish.php $
+$LastChangedRevision: 3645 $
 
 */
 
@@ -469,34 +469,36 @@ $LastChangedRevision$
 		$s = $out['s'];
 		$id = $out['id'];
 
-		// hackish
-		global $is_article_list;
-		if (empty($id)) $is_article_list = true;
+        // hackish
+        global $is_article_list;
+        if (empty($id)) $is_article_list = true;
 
 		// by this point we should know the section, so grab its page and css
-		$rs = safe_row("page, css", "txp_section", "name = '".doSlash($s)."' limit 1");
-		$out['page'] = isset($rs['page']) ? $rs['page'] : '';
-		$out['css'] = isset($rs['css']) ? $rs['css'] : '';
-
-		if (is_numeric($id) and !$is_404) {
-			$a = safe_row('*, unix_timestamp(Posted) as uPosted, unix_timestamp(Expires) as uExpires, unix_timestamp(LastMod) as uLastMod', 'textpattern', 'ID='.intval($id).(gps('txpreview') ? '' : ' and Status in (4,5)'));
-			if ($a) {
-				$Posted             = $a['Posted'];
-				$out['id_keywords'] = $a['Keywords'];
-				$out['id_author']   = $a['AuthorID'];
-				populateArticleData($a);
-
-				$uExpires = $a['uExpires'];
-				if ($uExpires and time() > $uExpires and !$publish_expired_articles) {
-					$out['status'] = '410';
-				}
-
-				if ($np = getNextPrev($id, $Posted, $s))
-					$out = array_merge($out, $np);
-			}
+		if (txpinterface != 'css') {
+            $rs = safe_row("page, css", "txp_section", "name = '".doSlash($s)."' limit 1");
+            $out['page'] = isset($rs['page']) ? $rs['page'] : '';
+            $out['css'] = isset($rs['css']) ? $rs['css'] : '';
 		}
 
-		$out['path_from_root'] = rhu; // these are deprecated as of 1.0
+        if (is_numeric($id) and !$is_404) {
+            $a = safe_row('*, unix_timestamp(Posted) as uPosted, unix_timestamp(Expires) as uExpires, unix_timestamp(LastMod) as uLastMod', 'textpattern', 'ID='.intval($id).(gps('txpreview') ? '' : ' and Status in (4,5)'));
+            if ($a) {
+                $Posted             = $a['Posted'];
+                $out['id_keywords'] = $a['Keywords'];
+                $out['id_author']   = $a['AuthorID'];
+                populateArticleData($a);
+
+                $uExpires = $a['uExpires'];
+                if ($uExpires and time() > $uExpires and !$publish_expired_articles) {
+                    $out['status'] = '410';
+                }
+
+                if ($np = getNextPrev($id, $Posted, $s))
+                    $out = array_merge($out, $np);
+            }
+        }
+
+        $out['path_from_root'] = rhu; // these are deprecated as of 1.0
 		$out['pfr']            = rhu; // leaving them here for plugin compat
 
 		$out['path_to_site']   = $path_to_site;
@@ -603,34 +605,35 @@ $LastChangedRevision$
 
 		//getting attributes
 		$theAtts = lAtts(array(
-			'form'      => 'default',
-			'listform'  => '',
-			'searchform'=> '',
-			'limit'     => 10,
-			'pageby'    => '',
-			'category'  => '',
-			'section'   => '',
-			'excerpted' => '',
-			'author'    => '',
-			'sort'      => '',
-			'sortby'    => '', // deprecated in 4.0.4
-			'sortdir'   => '', // deprecated in 4.0.4
-			'month'     => '',
-			'keywords'  => '',
-			'frontpage' => '',
-			'id'        => '',
-			'time'      => 'past',
-			'status'    => '4',
-			'pgonly'    => 0,
-			'searchall' => 1,
-			'searchsticky' => 0,
+			'form'          => 'default',
+			'listform'      => '',
+			'searchform'    => '',
+			'limit'         => 10,
+			'pageby'        => '',
+			'category'      => '',
+			'section'       => '',
+			'excerpted'     => '',
+			'author'        => '',
+			'sort'          => '',
+			'sortby'        => '', // deprecated in 4.0.4
+			'sortdir'       => '', // deprecated in 4.0.4
+			'month'         => '',
+			'keywords'      => '',
+			'expired'       => $publish_expired_articles,
+			'frontpage'     => '',
+			'id'            => '',
+			'time'          => 'past',
+			'status'        => '4',
+			'pgonly'        => 0,
+			'searchall'     => 1,
+			'searchsticky'  => 0,
 			'allowoverride' => (!$q and !$iscustom),
-			'offset'    => 0,
-			'wraptag'	=> '',
-			'break'		=> '',
-			'label'		=> '',
-			'labeltag'	=> '',
-			'class'		=> ''
+			'offset'        => 0,
+			'wraptag'       => '',
+			'break'         => '',
+			'label'         => '',
+			'labeltag'      => '',
+			'class'         => ''
 		)+$customlAtts,$atts);
 
 		// if an article ID is specified, treat it as a custom list
@@ -751,7 +754,7 @@ $LastChangedRevision$
 			default:
 				$time = " and Posted <= now()";
 		}
-		if (!$publish_expired_articles) {
+		if (!$expired) {
 			$time .= " and (now() <= Expires or Expires = ".NULLDATETIME.")";
 		}
 
@@ -1283,13 +1286,13 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function ckEx($table,$val,$debug='')
 	{
-		return safe_field("name",'txp_'.$table,"`name` like '".doSlash($val)."' limit 1",$debug);
+		return safe_field("name",'txp_'.$table,"`name` = '".doSlash($val)."' limit 1",$debug);
 	}
 
 // -------------------------------------------------------------
 	function ckCat($type,$val,$debug='')
 	{
-		return safe_field("name",'txp_category',"`name` like '".doSlash($val)."' AND type = '".doSlash($type)."' limit 1",$debug);
+		return safe_field("name",'txp_category',"`name` = '".doSlash($val)."' AND type = '".doSlash($type)."' limit 1",$debug);
 	}
 
 // -------------------------------------------------------------
@@ -1301,12 +1304,12 @@ $LastChangedRevision$
 // -------------------------------------------------------------
 	function lookupByTitle($val,$debug='')
 	{
-		return safe_row("ID,Section",'textpattern',"url_title like '".doSlash($val)."' and Status >= 4 limit 1",$debug);
+		return safe_row("ID,Section",'textpattern',"url_title = '".doSlash($val)."' and Status >= 4 limit 1",$debug);
 	}
 // -------------------------------------------------------------
 	function lookupByTitleSection($val,$section,$debug='')
 	{
-		return safe_row("ID,Section",'textpattern',"url_title like '".doSlash($val)."' AND Section='".doSlash($section)."' and Status >= 4 limit 1",$debug);
+		return safe_row("ID,Section",'textpattern',"url_title = '".doSlash($val)."' AND Section='".doSlash($section)."' and Status >= 4 limit 1",$debug);
 	}
 
 // -------------------------------------------------------------

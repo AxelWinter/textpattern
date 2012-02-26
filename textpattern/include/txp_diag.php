@@ -9,8 +9,8 @@
 
 	Use of this software indicates acceptance of the Textpattern license agreement
 
-$HeadURL$
-$LastChangedRevision$
+$HeadURL: http://textpattern.googlecode.com/svn/development/4.x/textpattern/include/txp_diag.php $
+$LastChangedRevision: 3660 $
 
 */
 
@@ -88,6 +88,8 @@ $LastChangedRevision$
 		'/update/_to_4.2.0.php',
 		'/update/_to_4.3.0.php',
 		'/update/_to_4.4.0.php',
+		'/update/_to_4.4.1.php',
+		'/update/_to_4.5.0.php',
 		'/update/_update.php'
 	);
 
@@ -107,8 +109,10 @@ $LastChangedRevision$
 
 
 	function apache_module($m) {
-		$modules = apache_get_modules();
-		return in_array($m, $modules);
+		$modules = @apache_get_modules();
+		if (is_array($modules)) {
+			return in_array($m, $modules);
+		}
 	}
 
 	function test_tempdir($dir) {

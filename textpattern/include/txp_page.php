@@ -8,8 +8,8 @@
 
 	Use of this software indicates acceptance of the Textpattern license agreement
 
-$HeadURL$
-$LastChangedRevision$
+$HeadURL: http://textpattern.googlecode.com/svn/development/4.x/textpattern/include/txp_page.php $
+$LastChangedRevision: 3655 $
 
 */
 	if (!defined('txpinterface')) die('txpinterface is undefined.');
@@ -75,7 +75,7 @@ $LastChangedRevision$
 
 		echo
 			'<div id="'.$event.'_container" class="txp-container txp-edit">'.
-			startTable('edit', '', '').
+			startTable('edit').
 			tr(
 				tda(
 

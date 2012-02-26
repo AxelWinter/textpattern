@@ -9,8 +9,8 @@
 
 	Use of this software indicates acceptance of the Textpattern license agreement
 
-$HeadURL$
-$LastChangedRevision$
+$HeadURL: http://textpattern.googlecode.com/svn/development/4.x/textpattern/include/txp_prefs.php $
+$LastChangedRevision: 3624 $
 
 */
 	if (!defined('txpinterface')) die('txpinterface is undefined.');
@@ -549,6 +549,18 @@ EOS
 		return pluggable_ui('prefs_ui', 'theme_name',
 			selectInput($name, $vals, $val, '', '', $name));
 	}
+
+//-------------------------------------------------------------
+	function doctypes($name, $val)
+	{
+		$vals = array(
+			'xhtml' => gTxt('XHTML'),
+			'html5' => gTxt('HTML5')
+		);
+
+		return selectInput($name, $vals, $val, '', '', $name);
+	}
+
 //-------------------------------------------------------------
 	function advanced_prefs($message = '')
 	{
@@ -854,7 +866,9 @@ EOS
 			, '3', '', 'nav-tertiary')
 		),
 
+		tr(tda('&nbsp;',' colspan="3" style="font-size:0.25em"')),
 		tr( $lang_form ),
+		tr(tda('&nbsp;',' colspan="3" style="font-size:0.25em"')),
 		tr(tda(gTxt('language')).tda(gTxt('from_server')).( ($show_files) ? tda(gTxt('from_file')) : '' ), ' style="font-weight:bold"');
 		echo $list;
 

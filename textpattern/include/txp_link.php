@@ -9,8 +9,8 @@
 
 	Use of this software indicates acceptance of the Textpattern license agreement
 
-$HeadURL$
-$LastChangedRevision$
+$HeadURL: http://textpattern.googlecode.com/svn/development/4.x/textpattern/include/txp_link.php $
+$LastChangedRevision: 3637 $
 
 */
 
@@ -201,7 +201,7 @@ $LastChangedRevision$
 						, 35, 'actions').
 
 						td(
-							($can_edit ? href($linkname, $edit_url) : $linkname)
+							($can_edit ? href(htmlspecialchars($linkname), $edit_url) : htmlspecialchars($linkname))
 						, 125, 'name').
 
 						td(

@@ -1,8 +1,8 @@
 <?php
 
 /*
-$HeadURL$
-$LastChangedRevision$
+$HeadURL: http://textpattern.googlecode.com/svn/development/4.x/textpattern/lib/txplib_misc.php $
+$LastChangedRevision: 3657 $
 */
 
 // -------------------------------------------------------------
@@ -622,7 +622,7 @@ function escape_js($js)
 // -------------------------------------------------------------
 	function load_plugins($type=0)
 	{
-		global $prefs, $plugins, $plugins_ver;
+		global $prefs, $plugins, $plugins_ver, $app_mode;
 
 		if (!is_array($plugins)) $plugins = array();
 
@@ -640,7 +640,8 @@ function escape_js($js)
 			}
 		}
 
-		$where = 'status = 1 AND type IN ('.($type ? '1,3' : '0,1').')';
+		$admin = ($app_mode == 'async' && !AJAXALLY_CHALLENGED ? '4,5' : '1,3,4,5');
+		$where = 'status = 1 AND type IN ('.($type ? $admin : '0,1,5').')';
 
 		$rs = safe_rows("name, code, version", "txp_plugin", $where.' order by load_order');
 		if ($rs) {
@@ -1576,7 +1577,7 @@ function escape_js($js)
 
 		if (!isset($disabled))
 		{
-			$disabled = explode(',', ini_get('disable_functions'));
+			$disabled = do_list(ini_get('disable_functions'));
 		}
 
 		return in_array($function, $disabled);
@@ -1809,7 +1810,7 @@ function escape_js($js)
 
 		include_once txpath.'/lib/classTextile.php';
 
-		$textile = new Textile();
+		$textile = new Textile($prefs['doctype']);
 
 		return $textile->TextileRestricted($msg, $lite, $disallow_images, $rel);
 	}
@@ -1958,13 +1959,13 @@ function escape_js($js)
 	}
 
 // -------------------------------------------------------------
-	function txp_die($msg, $status='503')
+	function txp_die($msg, $status='503', $url='')
 	{
 		// 503 status might discourage search engines from indexing or caching the error message
 
 		//Make it possible to call this function as a tag, e.g. in an article <txp:txp_die status="410" />
 		if (is_array($msg))
-			extract(lAtts(array('msg' => '', 'status' => '503'),$msg));
+			extract(lAtts(array('msg' => '', 'status' => '503', 'url' => ''),$msg));
 
 		// Intentionally incomplete - just the ones we're likely to use
 		$codes = array(
@@ -1996,6 +1997,13 @@ function escape_js($js)
 		}
 
 		callback_event('txp_die', $code);
+
+		// redirect with status
+		if ($url && in_array($code, array(301, 302, 307))) {
+			ob_end_clean();
+			header("Location: $url", true, $code);
+			die('<html><head><meta http-equiv="refresh" content="0;URL='.htmlspecialchars($url).'"></head><body></body></html>');
+		}
 
 		if (@$GLOBALS['connected']) {
 			$out = safe_field('user_html','txp_page',"name='error_".doSlash($code)."'");
@@ -2493,7 +2501,15 @@ eod;
 // supports one level of nested arrays at most.
 	function send_xml_response($response=array())
 	{
-		ob_clean();
+		static $headers_sent = false;
+
+		if (!$headers_sent) {
+			ob_clean();
+			header('Content-Type: text/xml; charset=utf-8');
+			$out[] = '<?xml version="1.0" encoding="utf-8" standalone="yes"?>';
+			$headers_sent = true;
+		}
+
 		$default_response = array (
 			'http-status' => '200 OK',
 		);
@@ -2501,9 +2517,7 @@ eod;
 		// backfill default response properties
 		$response = $response + $default_response;
 
-		header('Content-Type: text/xml; charset=utf-8');
 		txp_status_header($response['http-status']);
-		$out[] = '<?xml version="1.0" encoding="utf-8" standalone="yes"?>';
 		$out[] = '<textpattern>';
 		foreach ($response as $element => $value)
 		{
@@ -2525,7 +2539,7 @@ eod;
 			}
 		}
 		$out[] = '</textpattern>';
-		die(join(n, $out));
+		echo join(n, $out);
 	}
 
 /**
@@ -2536,30 +2550,29 @@ eod;
  */
 	function send_script_response($out = '')
 	{
-		ob_clean();
-		header('Content-Type: text/javascript; charset=utf-8');
-		txp_status_header('200 OK');
-		die($out);
+		static $headers_sent = false;
+		if (!$headers_sent) {
+			ob_clean();
+			header('Content-Type: text/javascript; charset=utf-8');
+			txp_status_header('200 OK');
+			$headers_sent = true;
+		}
+		echo ";\n".$out.";\n";
 	}
 
 /**
- * Display a modal client message in response to an AJAX request
+ * Display a modal client message in response to an AJAX request and halt execution.
  *
- * @param array $message $message[0] is the message's text; $message[1] is the message's type (one of E_ERROR or E_WARNING, anything else meaning "success"; not used)
+ * @param array $message string|array: $message[0] is the message's text; $message[1] is the message's type (one of E_ERROR or E_WARNING, anything else meaning "success"; not used)
  * @since 4.5
  */
-function modal_response($thing)
+function modal_halt($thing)
 {
-	global $app_mode;
+	global $app_mode, $theme;
 	if ($app_mode == 'async')
 	{
-		// @see theme::announce() for message format
-		if (!is_array($thing) || !isset($thing[1]))
- 		{
- 			$thing = array($thing, 0);
- 		}
- 		// TODO: Better/themeable popup
-		send_script_response('window.alert("'.escape_js(strip_tags($thing[0])).'")');
+		send_script_response($theme->announce_async($thing, true));
+		die();
 	}
 }
 

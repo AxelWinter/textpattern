@@ -1,7 +1,7 @@
 <?php
 /*
-$HeadURL$
-$LastChangedRevision$
+$HeadURL: http://textpattern.googlecode.com/svn/development/4.x/textpattern/lib/constants.php $
+$LastChangedRevision: 3647 $
 */
 
 $old_level = error_reporting(E_ALL ^ (E_NOTICE));
@@ -51,6 +51,12 @@ define('PLUGIN_RESERVED_FLAGS', 0x0fff); // reserved bits for use by Textpattern
 
 define('PASSWORD_COMPLEXITY', 8); // log(2) of stretching iteration count
 define('PASSWORD_PORTABILITY', TRUE);
+
+defined('AJAX_TIMEOUT') || define('AJAX_TIMEOUT', max(30000, 1000 * @ini_get('max_execution_time')));
+defined('AJAXALLY_CHALLENGED') || define('AJAXALLY_CHALLENGED', false); // TODO: @since 4.5.0; Wait for plugins to catch up, then lose this at a future release
+
+define('PARTIAL_STATIC', false);
+define('PARTIAL_VOLATILE', true);
 
 error_reporting($old_level);
 unset($old_level);

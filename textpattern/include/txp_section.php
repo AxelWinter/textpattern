@@ -7,10 +7,10 @@
 	www.textpattern.com
 	All rights reserved
 
-	Use of this software indicates acceptance ofthe Textpattern license agreement
+	Use of this software indicates acceptance of the Textpattern license agreement
 
-$HeadURL$
-$LastChangedRevision$
+$HeadURL: http://textpattern.googlecode.com/svn/development/4.x/textpattern/include/txp_section.php $
+$LastChangedRevision: 3658 $
 
 */
 
@@ -176,8 +176,10 @@ $LastChangedRevision$
 		{
 			if (safe_field('name', 'txp_section', "name='$safe_name'"))
 			{
+				// Invalid input. Halt all further processing (e.g. plugin event handlers).
 				$message = array(gTxt('section_name_already_exists', array('{name}' => $name)), E_ERROR);
-				modal_response($message);
+				modal_halt($message);
+				// TODO: Deprecate non-AJAX alternative code path in next version
 				sec_section_list($message);
 				return;
 			}
@@ -195,7 +197,7 @@ $LastChangedRevision$
 			{
 				safe_update("txp_section", "is_default = 0", "name != '$safe_old_name'");
 				// switch off $is_default for all sections in async app_mode
-				if ($app_mode == 'async') {
+				if (!AJAXALLY_CHALLENGED) {
 					$response[] =  '$("input[name=\"is_default\"][value=\"1\"]").attr("checked", false);'.
 								'$("input[name=\"is_default\"][value=\"0\"]").attr("checked", true);';
 				}
@@ -213,14 +215,12 @@ $LastChangedRevision$
 			", "name = '$safe_old_name'");
 
 			safe_update('textpattern', "Section = '$safe_name'", "Section = '$safe_old_name'");
-
 		}
 
 		update_lastmod();
-		$message = gTxt('section_updated', array('{name}' => $name));
 
-		if ($app_mode == 'async') {
-
+		if (!AJAXALLY_CHALLENGED) {
+			global $theme;
 			// Keep old name around to mangle existing HTML
 			$on = $old_name;
 			// Old became new as we have saved this section
@@ -237,9 +237,11 @@ $LastChangedRevision$
 			// Reflect new section name on id and row label
 			$label = ($name == 'default' ? gTxt('default') : $name);
 			$response[] = '$("tr#section-'.$on.'").attr("id", "section-'.$name.'").find(".label").html("'.$label.'")';
-			send_script_response(join(";\n", $response).';');
+			$response[] = $theme->announce_async(gTxt('section_updated', array('{name}' => $name)));
+			send_script_response(join(";\n", $response));
 		} else {
-			sec_section_list($message);
+			// TODO: Deprecate non-AJAX alternative code path in future version
+			sec_section_list(gTxt('section_updated', array('{name}' => $name)));
 		}
 	}
 
@@ -347,6 +349,6 @@ $LastChangedRevision$
 
 			endTable();
 
-			return form($out,'', 'postForm(this);', 'post', 'async', 'section-'.$name, 'section-form-'.$name);
+			return form($out,'', '', 'post', 'async', 'section-'.$name, 'section-form-'.$name);
 }
 ?>

@@ -9,8 +9,8 @@
 
 	Use of this software indicates acceptance of the Textpattern license agreement
 
-$HeadURL$
-$LastChangedRevision$
+$HeadURL: http://textpattern.googlecode.com/svn/development/4.x/textpattern/include/txp_category.php $
+$LastChangedRevision: 3663 $
 */
 
 if (!defined('txpinterface')) die('txpinterface is undefined.');
@@ -254,9 +254,12 @@ if ($event == 'category') {
 						'select ID, Category2 as category from '.safe_pfx('textpattern').
 					') as t where category != "" group by category');
 
-				foreach ($rs2 as $a)
+				if ($rs2 !== false)
 				{
-					$total_count[$a['category']] = $a['num'];
+					foreach ($rs2 as $a)
+					{
+						$total_count[$a['category']] = $a['num'];
+					}
 				}
 			}
 

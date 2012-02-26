@@ -1,7 +1,7 @@
 <?php
 /*
-$HeadURL$
-$LastChangedRevision$
+$HeadURL: http://textpattern.googlecode.com/svn/development/4.x/textpattern/update/_update.php $
+$LastChangedRevision: 3624 $
 */
 	if (!defined('TXP_UPDATE'))
 		exit("Nothing here. You can't access this file directly.");
@@ -109,6 +109,25 @@ $LastChangedRevision$
 	{
 		if ((include txpath.DS.'update'.DS.'_to_4.4.1.php') !== false)
 			$dbversion = '4.4.1';
+	}
+
+	if (version_compare($dbversion, '4.5.0', '<'))
+	{
+		if ((include txpath.DS.'update'.DS.'_to_4.5.0.php') !== false)
+;#			$dbversion = '4.5.0';
+	}
+
+	// Invite optional third parties to the update experience
+	// Convention: Put custom code into file(s) at textpattern/update/custom/post-update-abc-foo.php
+	// where 'abc' is the third party's reserved prefix (@see http://textpattern.net/wiki/index.php?title=Reserved_Plugin_Prefixes)
+	// and 'foo' is whatever. The execution order among all files is undefined.
+	$files = glob(txpath.'/update/custom/post-update*.php');
+	if (is_array($files))
+	{
+		foreach ($files as $f)
+		{
+			include $f;
+		}
 	}
 
 	// keep track of updates for svn users

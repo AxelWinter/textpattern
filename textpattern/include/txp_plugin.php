@@ -9,8 +9,8 @@
 
 	Use of this software indicates acceptance of the Textpattern license agreement
 
-$HeadURL$
-$LastChangedRevision$
+$HeadURL: http://textpattern.googlecode.com/svn/development/4.x/textpattern/include/txp_plugin.php $
+$LastChangedRevision: 3653 $
 
 */
 
@@ -372,7 +372,7 @@ $LastChangedRevision$
 
 					extract($plugin);
 
-					$type  = empty($type)  ? 0 : min(max(intval($type), 0), 3);
+					$type  = empty($type)  ? 0 : min(max(intval($type), 0), 5);
 					$order = empty($order) ? 5 : min(max(intval($order), 1), 9);
 					$flags = empty($flags) ? 0 : intval($flags);
 

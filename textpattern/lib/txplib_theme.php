@@ -1,8 +1,8 @@
 <?php
 
 /*
-$HeadURL$
-$LastChangedRevision$
+$HeadURL: http://textpattern.googlecode.com/svn/development/4.x/textpattern/lib/txplib_theme.php $
+$LastChangedRevision: 3657 $
 */
 
 if (!defined ('THEME')) define('THEME', 'theme/');
@@ -250,10 +250,22 @@ class theme
 	}
 
 	/**
-	 * Output notification message
+	 * Output notification message for synchronous HTML views
 	 * @param	array	$thing	Message text and status flag
+	 * @param   boolean $modal  true: Immediate user interaction suggested
 	 */
-	function announce($thing=array('', 0))
+	function announce($thing=array('', 0), $modal = false)
+	{
+		trigger_error(__FUNCTION__.' is abstract.', E_USER_ERROR);
+	}
+
+	/**
+	 * Output notification message for asynchronous Javascript views
+	 * @param	array	$thing	Message text and status flag
+	 * @param   boolean $modal  true: Immediate user interaction suggested
+	 * @since   4.5.0
+	 */
+	function announce_async($thing=array('', 0), $modal = false)
 	{
 		trigger_error(__FUNCTION__.' is abstract.', E_USER_ERROR);
 	}
