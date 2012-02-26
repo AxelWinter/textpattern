@@ -9,11 +9,6 @@
  */
 
 /*
-$HeadURL$
-$LastChangedRevision$
-*/
-
-/*
 
 _____________
 T E X T I L E
@@ -28,9 +23,10 @@ All rights reserved.
 Thanks to Carlo Zottmann <carlo@g-blog.net> for refactoring
 Textile's procedural code into a class framework
 
-Additions and fixes Copyright (c) 2006    Alex Shiels http://thresholdstate.com/
-Additions and fixes Copyright (c) 2010    Stef Dawson http://stefdawson.com/
-Additions and fixes Copyright (c) 2010-12 Netcarver   http://github.com/netcarver
+Additions and fixes Copyright (c) 2006    Alex Shiels       http://thresholdstate.com/
+Additions and fixes Copyright (c) 2010    Stef Dawson       http://stefdawson.com/
+Additions and fixes Copyright (c) 2010-12 Netcarver         http://github.com/netcarver
+Additions and fixes Copyright (c) 2011    Jeff Soo          http://ipsedixit.net
 Additions and fixes Copyright (c) 2012    Robert Wetzlmayr 	http://wetzlmayr.com/
 
 _____________
@@ -363,13 +359,25 @@ class Textile
 	var $max_span_depth = 5;
 
 	var $ver = '2.2.0';
-	var $rev = '$Rev$';
+	var $rev = '$Rev: 3359 $';
 
 	var $doc_root;
 
+	var $doctype;
+
 // -------------------------------------------------------------
-	function Textile()
+	function Textile( $doctype = 'xhtml' )
 	{
+		$doctype_whitelist = array( # All lower case please...
+			'xhtml',
+			'html5',
+		);
+		$doctype = strtolower( $doctype );
+		if( !in_array( $doctype, $doctype_whitelist ) )
+			$this->doctype = 'xhtml';
+		else
+			$this->doctype = $doctype;
+
 		$this->hlgn = "(?:\<(?!>)|(?<!<)\>|\<\>|\=|[()]+(?! ))";
 		$this->vlgn = "[\-^~]";
 		$this->clas = "(?:\([^)\n]+\))";	# Don't allow classes/ids/languages/styles to span across newlines
@@ -420,7 +428,7 @@ class Textile
 			'/(?<=\s|^|[>(;-])(['.$abr.']{3,})(['.$nab.']*)(?=\s|'.$pnc.'|<|$)(?=[^">]*?(<|$))/'.$mod,  // 3+ uppercase
 			'/([^.]?)\.{3}/',                       // ellipsis
 			'/(\s?)--(\s?)/',                       // em dash
-			'/\s-(?:\s|$)/',                        // en dash
+			'/( )-( )/',                            // en dash
 			'/(\d+)( ?)x( ?)(?=\d+)/',              // dimension sign
 			'/(\b ?|\s|^)[([]TM[])]/i',             // trademark
 			'/(\b ?|\s|^)[([]R[])]/i',              // registered
@@ -439,11 +447,11 @@ class Textile
 			txt_quote_single_open,                 // single opening
 			'$1'.txt_quote_double_close,           // double closing
 			txt_quote_double_open,                 // double opening
-			'<acronym title="$2">$1</acronym>',     // 3+ uppercase acronym
+			(('html5' === $this->doctype) ? '<abbr title="$2">$1</abbr>' : '<acronym title="$2">$1</acronym>'),     // 3+ uppercase acronym
 			'<span class="caps">glyph:$1</span>$2', // 3+ uppercase
 			'$1'.txt_ellipsis,                     // ellipsis
 			'$1'.txt_emdash.'$2',                  // em dash
-			' '.txt_endash.' ',                    // en dash
+			'$1'.txt_endash.'$2',                  // en dash
 			'$1$2'.txt_dimension.'$3',             // dimension sign
 			'$1'.txt_trademark,                    // trademark
 			'$1'.txt_registered,                   // registered
@@ -578,10 +586,11 @@ class Textile
     }
 
 // -------------------------------------------------------------
-	function pba($in, $element = "", $include_id = 1) // "parse block attributes"
+	function pba($in, $element = "", $include_id = 1, $algn = '') // "parse block attributes"
 	{
 		$style = '';
 		$class = '';
+		$autoclass = '';
 		$lang = '';
 		$colspan = '';
 		$rowspan = '';
@@ -589,6 +598,7 @@ class Textile
 		$width = '';
 		$id = '';
 		$atts = '';
+		$align = '';
 
 		if (!empty($in)) {
 			$matched = $in;
@@ -617,8 +627,34 @@ class Textile
 			if (preg_match("/\(([^()]+)\)/U", $matched, $cls)) {
 				$matched = str_replace($cls[0], '', $matched);	# Consume entire class block -- valid or invalid...
 				# Only allow a restricted subset of the CSS standard characters for classes/ids. No encoding markers allowed...
-				if (preg_match("/\(([-a-zA-Z0-9_\.\:\#]+)\)/U", $cls[0], $cls)) {
-					$class = $cls[1];
+				if (preg_match("/\(([-a-zA-Z 0-9_\.\:\#]+)\)/U", $cls[0], $cls)) {
+					$hashpos = strpos( $cls[1], '#' );
+					# If a textile class block attribute was found with a '#' in it
+					# split it into the css class and css id...
+					if( false !== $hashpos ) {
+						if (preg_match("/#([-a-zA-Z0-9_\.\:]*)$/", substr( $cls[1], $hashpos ), $ids))
+							$id = $ids[1];
+
+						if (preg_match("/^([-a-zA-Z 0-9_]*)/", substr( $cls[1], 0, $hashpos ), $ids))
+							$class = $ids[1];
+					}
+					else {
+						if (preg_match("/^([-a-zA-Z 0-9_]*)$/", $cls[1], $ids))
+							$class = $ids[1];
+					}
+				}
+			}
+
+			if( 'image' === $element && '' !== $algn ) {
+				$vals = array(
+					'<' => 'left',
+					'=' => 'center',
+					'>' => 'right');
+				if ( isset($vals[$algn]) ) {
+					if( 'html5' === $this->doctype )
+						$autoclass = " align-{$vals[$algn]}";
+					else
+						$align = $vals[$algn];
 				}
 			}
 
@@ -635,12 +671,6 @@ class Textile
 			if (preg_match("/($this->hlgn)/", $matched, $horiz))
 				$style[] = "text-align:" . $this->hAlign($horiz[1]);
 
-      		# If a textile class block attribute was found, split it into the css class and css id (if any)...
-			if (preg_match("/^([-a-zA-Z0-9_]*)#([-a-zA-Z0-9_\.\:]*)$/", $class, $ids)) {
-				$id = $ids[2];
-				$class = $ids[1];
-			}
-
 			if ($element == 'col') {
 				if (preg_match("/(?:\\\\(\d+))?\s*(\d+)?/", $matched, $csp)) {
 					$span = isset($csp[1]) ? $csp[1] : '';
@@ -648,8 +678,15 @@ class Textile
 				}
 			}
 
-			if ($this->restricted)
-				return ($lang)	  ? ' lang="'	. $this->cleanba($lang) . '"':'';
+			if ($this->restricted) {
+				$class = trim( $autoclass );
+				return join( '', array(
+					($lang)  ? ' lang="'  . $this->cleanba($lang)  . '"': '',
+					($class) ? ' class="' . $this->cleanba($class) . '"': '',
+				));
+			}
+			else
+				$class = trim( $class . $autoclass );
 
 			$o = '';
 			if( $style ) {
@@ -665,14 +702,15 @@ class Textile
 			}
 
 			return join('',array(
-				($style)   ? ' style="'   . $this->cleanba($style)    .'"':'',
-				($class)   ? ' class="'   . $this->cleanba($class)    .'"':'',
-				($lang)    ? ' lang="'    . $this->cleanba($lang)     .'"':'',
-				($id and $include_id) ? ' id="' . $this->cleanba($id) .'"':'',
-				($colspan) ? ' colspan="' . $this->cleanba($colspan)  .'"':'',
-				($rowspan) ? ' rowspan="' . $this->cleanba($rowspan)  .'"':'',
-				($span)    ? ' span="'    . $this->cleanba($span)     .'"':'',
-				($width)   ? ' width="'   . $this->cleanba($width)    .'"':'',
+				($style)   ? ' style="'   . $this->cleanba($style)    .'"' : '',
+				($class)   ? ' class="'   . $this->cleanba($class)    .'"' : '',
+				($lang)    ? ' lang="'    . $this->cleanba($lang)     .'"' : '',
+				($id and $include_id) ? ' id="' . $this->cleanba($id) .'"' : '',
+				($colspan) ? ' colspan="' . $this->cleanba($colspan)  .'"' : '',
+				($rowspan) ? ' rowspan="' . $this->cleanba($rowspan)  .'"' : '',
+				($span)    ? ' span="'    . $this->cleanba($span)     .'"' : '',
+				($width)   ? ' width="'   . $this->cleanba($width)    .'"' : '',
+				($align)   ? ' align="'   . $this->cleanba($align)    .'"' : '',
 			));
 		}
 		return '';
@@ -987,7 +1025,7 @@ class Textile
 		}
 		elseif ($tag == 'bc') {
 			$o1 = "<pre$atts>";
-			$o2 = "<code".$this->pba($att, '', 0).">";
+			$o2 = "<code>";
 			$c2 = "</code>";
 			$c1 = "</pre>";
 			$content = $this->shelve($this->r_encode_html(rtrim($content, "\n")."\n"));
@@ -1062,7 +1100,7 @@ class Textile
 					([^\s$f]+|\S.*?[^\s$f\n])             # content
 					([$pnct]*)                            # end
 					$f
-					($|[\]}]|(?=[$pnct]{1,2}|\s|\)))  # tail
+					($|[\[\]}<]|(?=[$pnct]{1,2}|\s|\)))  # tail
 				/xu", array(&$this, "fSpan"), $text);
 			}
 		}
@@ -1225,11 +1263,11 @@ class Textile
 		if( $backlink_type === '!' )
 			return '';
 		elseif( $backlink_type === '^' )
-			return '<a href="#noteref'.$info['refids'][0].'"><sup>'.$i.'</sup></a>';
+			return '<sup><a href="#noteref'.$info['refids'][0].'">'.$i.'</a></sup>';
 		else {
 			$_ = array();
 			foreach( $info['refids'] as $id ) {
- 				$_[] = '<a href="#noteref'.$id.'"><sup>'. ( ($decode) ? $this->decode_high('&#'.$i_.';') : $i_ ) .'</sup></a>';
+				$_[] = '<sup><a href="#noteref'.$id.'">'. ( ($decode) ? $this->decode_high('&#'.$i_.';') : $i_ ) .'</a></sup>';
 				$i_++;
 			}
 			$_ = join( ' ', $_ );
@@ -1446,8 +1484,7 @@ class Textile
 	{
 		list(, $algn, $atts, $url) = $m;
 		$url = htmlspecialchars($url);
-		$atts  = $this->pba($atts);
-		$atts .= ($algn != '')	? ' align="' . $this->iAlign($algn) . '"' : '';
+		$atts  = $this->pba($atts , 'image' , 1 , $algn);
 
  		if(isset($m[4]))
  		{
@@ -1638,16 +1675,6 @@ class Textile
 	}
 
 // -------------------------------------------------------------
-	function iAlign($in)
-	{
-		$vals = array(
-			'<' => 'left',
-			'=' => 'center',
-			'>' => 'right');
-		return (isset($vals[$in])) ? $vals[$in] : '';
-	}
-
-// -------------------------------------------------------------
 	function hAlign($in)
 	{
 		$vals = array(
@@ -1683,7 +1710,6 @@ class Textile
 	}
 
 // -------------------------------------------------------------
-// NOTE: deprecated
 	function cmap()
 	{
 		$f = 0xffff;
