@@ -10,7 +10,7 @@
 	Use of this software indicates acceptance of the Textpattern license agreement
 
 $HeadURL: http://textpattern.googlecode.com/svn/development/4.x/textpattern/include/txp_plugin.php $
-$LastChangedRevision: 3677 $
+$LastChangedRevision: 3678 $
 
 */
 
@@ -47,9 +47,7 @@ $LastChangedRevision: 3677 $
 		echo '<div id="'.$event.'_control" class="txp-control-panel">';
 		echo n.n.startTable('edit', '', 'plugin-install').
 			tr(
-				tda(
-					plugin_form()
-				,' colspan="8"')
+				tda(plugin_form())
 			).
 		endTable().
 		'</div>';
@@ -460,20 +458,18 @@ $LastChangedRevision: 3677 $
 	function plugin_form()
 	{
 		return n.n.form(
-			graf(
-			tag(gTxt('install_plugin'), 'span', ' style="vertical-align: top;"').sp.
+			tag(gTxt('install_plugin'), 'label', ' for="plugin-install"').sp.
 
 			'<textarea id="plugin-install" class="code" name="plugin" cols="62" rows="1"></textarea>'.sp.
 
 			tag(
 				popHelp('install_plugin').sp.
 				fInput('submit', 'install_new', gTxt('upload'), 'smallerbox')
-		   , 'span', ' style="vertical-align: 6px;"').
+		   , 'span').
 
 				eInput('plugin').
 				sInput('plugin_verify')
-			)
-		, 'text-align: center;', '', 'post', 'plugin-data', '', 'plugin_install_form');
+		, '', '', 'post', 'plugin-data', '', 'plugin_install_form');
 	}
 
 // -------------------------------------------------------------
