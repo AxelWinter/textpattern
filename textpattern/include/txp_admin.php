@@ -10,7 +10,7 @@
 	Use of this software indicates acceptance of the Textpattern license agreement
 
 $HeadURL: http://textpattern.googlecode.com/svn/development/4.x/textpattern/include/txp_admin.php $
-$LastChangedRevision: 3677 $
+$LastChangedRevision: 3678 $
 
 */
 
@@ -244,7 +244,7 @@ $LastChangedRevision: 3677 $
 
 	function new_pass_form()
 	{
-		return '<div style="margin: 3em auto auto auto; text-align: center;">'.
+		return '<div class="txp-alter">'.
 		form(
 			tag(gTxt('change_password'), 'h2').
 
@@ -254,7 +254,7 @@ $LastChangedRevision: 3677 $
 				fInput('submit', 'change_pass', gTxt('submit'), 'smallerbox').
 				eInput('admin').
 				sInput('change_pass')
-			,' style="text-align: center;"')
+			)
 		, '', '', 'post', '', '', 'change_password').'</div>';
 	}
 
@@ -262,7 +262,7 @@ $LastChangedRevision: 3677 $
 
 	function change_email_form($email)
 	{
-		return '<div style="margin: 3em auto auto auto; text-align: center;">'.
+		return '<div class="txp-alter">'.
 		form(
 			tag(gTxt('change_email_address'), 'h2').
 			graf('<label for="new_email">'.gTxt('new_email').'</label> '.
@@ -270,7 +270,7 @@ $LastChangedRevision: 3677 $
 				fInput('submit', 'change_email', gTxt('submit'), 'smallerbox').
 				eInput('admin').
 				sInput('change_email')
-			,' style="text-align: center;"')
+			)
 		, '', '', 'post', '','', 'change_email').'</div>';
 	}
 
@@ -393,7 +393,7 @@ $LastChangedRevision: 3677 $
 
 		return form(
 
-			hed($caption, 2,' style="text-align: center;"').
+			hed($caption, 2,' class="txp-heading"').
 
 			startTable('edit', '', 'edit-pane').
 
