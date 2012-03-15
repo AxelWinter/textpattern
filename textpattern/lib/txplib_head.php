@@ -2,7 +2,7 @@
 
 /*
 $HeadURL: http://textpattern.googlecode.com/svn/development/4.x/textpattern/lib/txplib_head.php $
-$LastChangedRevision: 3649 $
+$LastChangedRevision: 3678 $
 */
 
 // -------------------------------------------------------------
@@ -326,6 +326,7 @@ $LastChangedRevision: 3649 $
 	}
 
 // -------------------------------------------------------------
+	# DEPRECATED?? Has this ever been used?
 	function button($label,$link)
 	{
 		return '<span style="margin-right:2em"><a href="?event='.$link.'" class="plain">'.$label.'</a></span>';
