@@ -10,7 +10,7 @@
 	Use of this software indicates acceptance of the Textpattern license agreement
 
 $HeadURL: http://textpattern.googlecode.com/svn/development/4.x/textpattern/include/txp_admin.php $
-$LastChangedRevision: 3570 $
+$LastChangedRevision: 3677 $
 
 */
 
@@ -426,10 +426,7 @@ $LastChangedRevision: 3570 $
 			pluggable_ui('author_ui', 'extend_detail_form', '', $rs).
 
 			tr(
-				td().
-				td(
-					fInput('submit', '', gTxt('save'), 'publish').($user_id ? '' : sp.popHelp('add_new_author'))
-				)
+				tdcs(fInput('submit', '', gTxt('save'), 'publish').($user_id ? '' : popHelp('add_new_author')), 2)
 			).
 
 			endTable().

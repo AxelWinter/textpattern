@@ -10,7 +10,7 @@
 	Use of this software indicates acceptance of the Textpattern license agreement
 
 $HeadURL: http://textpattern.googlecode.com/svn/development/4.x/textpattern/include/txp_plugin.php $
-$LastChangedRevision: 3653 $
+$LastChangedRevision: 3677 $
 
 */
 

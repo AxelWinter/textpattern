@@ -10,7 +10,7 @@
 	Use of this software indicates acceptance of the Textpattern license agreement
 
 $HeadURL: http://textpattern.googlecode.com/svn/development/4.x/textpattern/include/txp_discuss.php $
-$LastChangedRevision: 3613 $
+$LastChangedRevision: 3676 $
 
 */
 
@@ -442,7 +442,7 @@ $LastChangedRevision: 3613 $
 						), $visible, false)
 					, '', 'status'),
 
-					td().td(fInput('submit', 'step', gTxt('save'), 'publish'))
+					tdcs(fInput('submit', 'step', gTxt('save'), 'publish'), 2)
 
 				).
 

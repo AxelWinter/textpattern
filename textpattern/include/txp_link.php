@@ -10,7 +10,7 @@
 	Use of this software indicates acceptance of the Textpattern license agreement
 
 $HeadURL: http://textpattern.googlecode.com/svn/development/4.x/textpattern/include/txp_link.php $
-$LastChangedRevision: 3637 $
+$LastChangedRevision: 3676 $
 
 */
 
@@ -336,10 +336,7 @@ $LastChangedRevision: 3637 $
 				pluggable_ui('link_ui', 'extend_detail_form', '', $rs).
 
 				tr(
-					td().
-					td(
-						fInput('submit', '', gTxt('save'), 'publish')
-					)
+					tdcs(fInput('submit', '', gTxt('save'), 'publish'), 2)
 				).
 
 				endTable().

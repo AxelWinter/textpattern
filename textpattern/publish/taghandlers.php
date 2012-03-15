@@ -7,7 +7,7 @@
 	Use of this software denotes acceptance of the Textpattern license agreement
 
 $HeadURL: http://textpattern.googlecode.com/svn/development/4.x/textpattern/publish/taghandlers.php $
-$LastChangedRevision: 3624 $
+$LastChangedRevision: 3671 $
 
 */
 
@@ -47,7 +47,7 @@ $LastChangedRevision: 3624 $
 
 	function css($atts)
 	{
-		global $css;
+		global $css, $doctype;
 
 		extract(lAtts(array(
 			'format' => 'url',
@@ -67,7 +67,8 @@ $LastChangedRevision: 3624 $
 		$url = hu.'css.php?n='.$name;
 
 		if ($format == 'link') {
-			return '<link rel="'.$rel.'" type="text/css"'.
+			return '<link rel="'.$rel.
+				($doctype != 'html5' ? '" type="text/css"': '"').
 				($media ? ' media="'.$media.'"' : '').
 				($title ? ' title="'.$title.'"' : '').
 				' href="'.$url.'" />';
@@ -2114,16 +2115,12 @@ $LastChangedRevision: 3624 $
 
 		if ($link)
 		{
-			if (!preg_match('|^https?://|', $web))
-			{
-				$web = 'http://'.$web;
-			}
-
+			$web = comment_web();
 			$nofollow = (@$comment_nofollow ? ' rel="nofollow"' : '');
 
-			if (preg_match('|^https?://\S|', $web))
+			if (!empty($web))
 			{
-				return '<a href="'.htmlspecialchars($web).'"'.$nofollow.'>'.$name.'</a>';
+				return '<a href="'.$web.'"'.$nofollow.'>'.$name.'</a>';
 			}
 
 			if ($email && !$never_display_email)
@@ -2152,7 +2149,16 @@ $LastChangedRevision: 3624 $
 
 		assert_comment();
 
-		return htmlspecialchars($thiscomment['web']);
+		if (preg_match('/^\S/', $thiscomment['web']))
+		{
+			// Prepend default protocol 'http' for all non-local URLs
+			if (!preg_match('!^https?://|^#|^/[^/]!', $thiscomment['web']))
+			{
+				$thiscomment['web'] = 'http://'.$thiscomment['web'];
+			}
+			return htmlspecialchars($thiscomment['web']);
+		}
+		return '';
 	}
 
 // -------------------------------------------------------------
@@ -2733,13 +2739,13 @@ $LastChangedRevision: 3624 $
 
 		if ($quoted || empty($m) || $m === 'exact')
 		{
-			$regex_search = '/(?:\G|\s).{0,50}'.preg_quote($q).'.{0,50}(?:\s|$)/iu';
-			$regex_hilite = '/('.preg_quote($q).')/i';
+			$regex_search = '/(?:\G|\s).{0,50}'.preg_quote($q, '/').'.{0,50}(?:\s|$)/iu';
+			$regex_hilite = '/('.preg_quote($q, '/').')/i';
 		}
 		else
 		{
-			$regex_search = '/(?:\G|\s).{0,50}('.preg_replace('/\s+/', '|', preg_quote($q)).').{0,50}(?:\s|$)/iu';
-			$regex_hilite = '/('.preg_replace('/\s+/', '|', preg_quote($q)).')/i';
+			$regex_search = '/(?:\G|\s).{0,50}('.preg_replace('/\s+/', '|', preg_quote($q, '/')).').{0,50}(?:\s|$)/iu';
+			$regex_hilite = '/('.preg_replace('/\s+/', '|', preg_quote($q, '/')).')/i';
 		}
 
 		preg_match_all($regex_search, $result, $concat);

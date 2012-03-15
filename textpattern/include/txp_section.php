@@ -10,7 +10,7 @@
 	Use of this software indicates acceptance of the Textpattern license agreement
 
 $HeadURL: http://textpattern.googlecode.com/svn/development/4.x/textpattern/include/txp_section.php $
-$LastChangedRevision: 3658 $
+$LastChangedRevision: 3676 $
 
 */
 
@@ -339,7 +339,7 @@ $LastChangedRevision: 3658 $
 
 			n.n.tr(
 				tda(
-					fInput('submit', '', gTxt('save_button'), 'smallerbox').
+					fInput('submit', '', gTxt('save'), 'publish').
 					eInput('section').
 					sInput('section_save').
 					($default_section ? hInput('name', $name) : '').

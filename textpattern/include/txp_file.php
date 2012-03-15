@@ -14,7 +14,7 @@
 	Use of this mod denotes acceptance of the Textpattern license agreement
 
 $HeadURL: http://textpattern.googlecode.com/svn/development/4.x/textpattern/include/txp_file.php $
-$LastChangedRevision: 3596 $
+$LastChangedRevision: 3677 $
 
 */
 
