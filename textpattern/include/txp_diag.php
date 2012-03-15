@@ -10,7 +10,7 @@
 	Use of this software indicates acceptance of the Textpattern license agreement
 
 $HeadURL: http://textpattern.googlecode.com/svn/development/4.x/textpattern/include/txp_diag.php $
-$LastChangedRevision: 3660 $
+$LastChangedRevision: 3678 $
 
 */
 
@@ -476,7 +476,7 @@ $LastChangedRevision: 3660 $
 	$fmt_date = '%Y-%m-%d %H:%M:%S';
 
 	$out = array(
-		'<textarea id="diagnostic-details" cols="78" rows="18" readonly="readonly">',
+		'<textarea id="diagnostics-detail" cols="78" rows="18" readonly="readonly">',
 
 		gTxt('txp_version').cs.txp_version.' ('.($rev ? 'r'.$rev : 'unknown revision').')'.n,
 
