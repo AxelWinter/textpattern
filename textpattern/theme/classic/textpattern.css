@@ -140,7 +140,6 @@ font-weight: normal;
 color: #00f;
 background-color: #eee;
 }
-
 h2 a.pophelp {
 font-size: 0.76923076923077em;
 }
@@ -324,9 +323,15 @@ font-size: 0.9em;
 }
 
 table#edit td.noline,
-table#list td.noline {
+table#list td.noline	{
 vertical-align: middle;
 border: none;
+}
+
+table#edit .cell-label,
+table#list .cell-label	{
+vertical-align: middle;
+text-align: right;
 }
 
 table#list th, table#list td {
@@ -376,12 +381,17 @@ table#list li {
 margin: 0 0 2px 0;
 }
 
-table#list .multi-edit {
+table#list tfoot .multi-edit {
 text-align: right;
+border: none;
 }
 
-table#list tfoot .multi-edit {
-border: none;
+table#list .list-item {
+vertical-align:middle;
+}
+
+table#list .install-item {
+text-align:center;
 }
 
 /* other element overrides
@@ -401,7 +411,7 @@ font-size: 0.9em;
 text-align: center;
 }
 
-.pageby div {
+.pageby {
 margin: auto;
 text-align: center;
 }
@@ -460,8 +470,22 @@ font-style: italic;
 color: #aaa;
 }
 
+.txp-heading {
+text-align: center;
+}
+
 /* global layout
 ----------------------------------------------- */
+
+.txp-list {
+margin: 1em auto auto;
+}
+
+.txp-message,
+.txp-alter {
+margin: 3em auto auto;
+text-align: center;
+}
 
 h1#textpattern {
 font-size: 15px;
@@ -568,12 +592,6 @@ vertical-align: middle;
 
 /* organize
 ----------------------------------------------- */
-
-td.categories {
-vertical-align: top;
-text-align: left;
-padding: 8px;
-}
 
 td.categories p {
 margin: 6px auto 3px auto;
@@ -695,13 +713,13 @@ display:none;
 #write-timestamp .edit.hour, #write-timestamp .edit.minute, #write-timestamp .edit.second,
 #write-expires .edit.exp_month, #write-expires .edit.exp_day,
 #write-expires .edit.exp_hour, #write-expires .edit.exp_minute, #write-expires .edit.exp_second {
-width: 3ex;
-text-align: center;
+	width: 3ex;
+	text-align: center;
 }
 
 #write-timestamp .edit.year, #write-expires .edit.exp_year {
-width: 5ex;
-text-align: center;
+	width: 5ex;
+	text-align: center;
 }
 
 /* comments
@@ -771,12 +789,20 @@ overflow: auto;
 background-color: #efefef;
 }
 
+#plugin_install_form label {
+vertical-align: top;
+}
+
+#plugin_install_form span {
+vertical-align: bottom;
+}
+
 textarea#plugin-install {
 width: 400px;
 height: 30px;
 }
 
-textarea#diagnostic-details {
+textarea#diagnostics-detail {
 width: 500px;
 height: 300px;
 }
@@ -836,7 +862,7 @@ margin: 20px 0 0 0;
 margin-top: 10px;
 }
 
-#page-prefs .text_uploader .smallerbox {
+#page-prefs .text_uploader .smallerbox{
 margin-top: 5px;
 }
 
