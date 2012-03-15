@@ -10,7 +10,7 @@
 	Use of this software indicates acceptance of the Textpattern license agreement
 
 $HeadURL: http://textpattern.googlecode.com/svn/development/4.x/textpattern/include/txp_link.php $
-$LastChangedRevision: 3676 $
+$LastChangedRevision: 3678 $
 
 */
 
@@ -326,7 +326,7 @@ $LastChangedRevision: 3676 $
 				tr(
 					tda(
 						'<label for="link-description">'.gTxt('description').'</label>'.sp.popHelp('link_description')
-					,' style="text-align: right; vertical-align: top;"').
+					).
 
 					td(
 						'<textarea id="link-description" name="description" cols="40" rows="7" tabindex="4">'.htmlspecialchars($description).'</textarea>'
