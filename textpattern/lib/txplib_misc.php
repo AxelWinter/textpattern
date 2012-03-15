@@ -2,7 +2,7 @@
 
 /*
 $HeadURL: http://textpattern.googlecode.com/svn/development/4.x/textpattern/lib/txplib_misc.php $
-$LastChangedRevision: 3673 $
+$LastChangedRevision: 3678 $
 */
 
 // -------------------------------------------------------------
@@ -342,7 +342,7 @@ function escape_js($js)
 	function require_privs($res, $user='')
 	{
 		if (!has_privs($res, $user))
-			exit(pageTop('Restricted').'<p style="margin-top:3em;text-align:center">'.
+			exit(pageTop('Restricted').'<p class="txp-message">'.
 				gTxt('restricted_area').'</p>');
 	}
 
