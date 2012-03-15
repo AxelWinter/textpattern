@@ -2,7 +2,7 @@
 
 /*
 $HeadURL: http://textpattern.googlecode.com/svn/development/4.x/textpattern/lib/txplib_html.php $
-$LastChangedRevision: 3569 $
+$LastChangedRevision: 3678 $
 */
 
 	define("t","\t");
@@ -573,7 +573,7 @@ $LastChangedRevision: 3569 $
 			$cell = '<label for="'.$label_id.'">'.$cell.'</label>';
 		}
 
-		return tda($cell,' class="noline" style="text-align: right; vertical-align: middle;"');
+		return tda($cell,' class="noline cell-label"');
 	}
 
 
