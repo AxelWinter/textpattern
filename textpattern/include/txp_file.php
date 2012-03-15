@@ -14,7 +14,7 @@
 	Use of this mod denotes acceptance of the Textpattern license agreement
 
 $HeadURL: http://textpattern.googlecode.com/svn/development/4.x/textpattern/include/txp_file.php $
-$LastChangedRevision: 3677 $
+$LastChangedRevision: 3678 $
 
 */
 
@@ -555,7 +555,7 @@ $LastChangedRevision: 3677 $
 										hInput('search_method', $search_method)
 									)
 								, '', '', 'post', 'edit-form', '', 'assign_file'),
-								' colspan="4" style="border:0"'
+								' colspan="4"'
 							)
 						, ' class="file-detail not-exists"');
 			}
