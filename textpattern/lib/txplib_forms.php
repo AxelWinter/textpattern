@@ -2,7 +2,7 @@
 
 /*
 $HeadURL: http://textpattern.googlecode.com/svn/development/4.x/textpattern/lib/txplib_forms.php $
-$LastChangedRevision: 3624 $
+$LastChangedRevision: 3678 $
 */
 
 //-------------------------------------------------------------
@@ -253,10 +253,15 @@ $LastChangedRevision: 3624 $
 
 //-------------------------------------------------------------
 
-	function text_area($name, $h, $w, $thing = '', $id = '')
+	function text_area($name, $h='', $w='', $thing = '', $id = '', $rows='5', $cols='40')
 	{
 		$id = ($id) ? ' id="'.$id.'"' : '';
-		return '<textarea'.$id.' name="'.$name.'" cols="40" rows="5" style="width:'.$w.'px; height:'.$h.'px;">'.htmlspecialchars($thing).'</textarea>';
+		$rows = ' rows="' . ( ($rows && is_numeric($rows)) ? $rows : '5') . '"';
+		$cols = ' cols="' . ( ($cols && is_numeric($cols)) ? $cols : '40') . '"';
+		$width = ($w) ? 'width:'.$w.'px;' : '';
+		$height = ($h) ? 'height:'.$h.'px;' : '';
+		$style = ($width || $height) ? ' style="'.$width.$height.'"' : '';
+		return '<textarea'.$id.' name="'.$name.'"'.$rows.$cols.$style.'>'.htmlspecialchars($thing).'</textarea>';
 	}
 
 //-------------------------------------------------------------
