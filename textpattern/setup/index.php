@@ -9,7 +9,7 @@
 	Use of this software indicates acceptance of the Textpattern license agreement.
 
 $HeadURL: http://textpattern.googlecode.com/svn/development/4.x/textpattern/setup/index.php $
-$LastChangedRevision: 3612 $
+$LastChangedRevision: 3678 $
 
 */
 

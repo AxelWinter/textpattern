@@ -11,7 +11,7 @@
 	the Textpattern license agreement
 
 $HeadURL: http://textpattern.googlecode.com/svn/development/4.x/textpattern/include/txp_log.php $
-$LastChangedRevision: 3581 $
+$LastChangedRevision: 3678 $
 
 */
 	if (!defined('txpinterface'))
