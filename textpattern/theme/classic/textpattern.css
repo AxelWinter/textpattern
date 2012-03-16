@@ -807,6 +807,10 @@ width: 500px;
 height: 300px;
 }
 
+#pre_flight_check table {
+width: 510px;
+}
+
 #page-plugin .manage {
 width: 8em;
 }
