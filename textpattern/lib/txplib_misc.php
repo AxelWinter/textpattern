@@ -2,7 +2,7 @@
 
 /*
 $HeadURL: http://textpattern.googlecode.com/svn/development/4.x/textpattern/lib/txplib_misc.php $
-$LastChangedRevision: 3678 $
+$LastChangedRevision: 3682 $
 */
 
 // -------------------------------------------------------------
@@ -456,7 +456,7 @@ function escape_js($js)
 	function remote_addr()
 	{
 		$ip = serverSet('REMOTE_ADDR');
-		if (($ip == '127.0.0.1' || $ip == serverSet('SERVER_ADDR')) && serverSet('HTTP_X_FORWARDED_FOR')) {
+		if (($ip == '127.0.0.1' || $i == '::1' || $ip = '::ffff:127.0.0.1' || $ip == serverSet('SERVER_ADDR')) && serverSet('HTTP_X_FORWARDED_FOR')) {
 			$ips = explode(', ', serverSet('HTTP_X_FORWARDED_FOR'));
 			$ip = $ips[0];
 		}
@@ -1497,20 +1497,22 @@ function escape_js($js)
 	{
 
 		if ($level == 'debug') {
-			error_reporting(E_ALL /* TODO: Enable E_STRICT in debug mode/PHP5.x? | (defined('E_STRICT') ? E_STRICT : 0) */);
+			// We need to violate/disable E_STRICT for PHP 4.x compatibility
+			// E_STRICT bitmask calculation stems from the variations for E_ALL in PHP 4.x, 5.{0,1,2,3}, and 5.4+
+			// E_STRICT is defined since PHP 5.x and is set in E_ALL in PHP 5.4
+			error_reporting(E_ALL & ~(defined('E_STRICT') ? E_STRICT : 0));
 		}
 		elseif ($level == 'live') {
 			// don't show errors on screen
 			$suppress = E_WARNING | E_NOTICE;
-			 // E_STRICT is defined since PHP 5.x and is a member of E_ALL in PHP 6.x. Now handle that!
 			if (defined('E_STRICT') && (E_ALL & E_STRICT)) $suppress |= E_STRICT;
 			if (defined('E_DEPRECATED')) $suppress |= E_DEPRECATED;
 			error_reporting(E_ALL ^ $suppress);
 			@ini_set("display_errors","1");
 		}
 		else {
-			// default is 'testing': display everything except notices
-			error_reporting(E_ALL ^ (E_NOTICE));
+			// default is 'testing': display everything except notices and strict
+			error_reporting((E_ALL ^ E_NOTICE) & ~(defined('E_STRICT') ? E_STRICT : 0));
 		}
 	}
 

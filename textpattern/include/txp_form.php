@@ -10,7 +10,7 @@
 	Use of this software indicates acceptance of the Textpattern license agreement
 
 $HeadURL: http://textpattern.googlecode.com/svn/development/4.x/textpattern/include/txp_form.php $
-$LastChangedRevision: 3560 $
+$LastChangedRevision: 3683 $
 
 */
 
@@ -18,7 +18,7 @@ $LastChangedRevision: 3560 $
 
 	global $vars;
 	$vars = array('Form','type','name','savenew','oldname');
-	$essential_forms = array('comments','comments_display','comment_form','default','Links','files');
+	$essential_forms = array('comments','comments_display','comment_form','default','plainlinks','files');
 
 	if ($event == 'form') {
 		require_privs('form');
